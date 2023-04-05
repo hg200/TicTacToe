@@ -11,8 +11,23 @@ const player = (sign) => {
 const gameBoard = (() => {
         const board = ["", "", "", "", "", "", "", "", ""];
 
+        const getBoard = (index) => {
+            if (index > board.length()) return;
+            return board[index];
+        }
 
-        return {};
+        const setBoard = (index, sign) => {
+            if (index > board.length()) return;
+            board[index] = sign;
+        }
+
+        const reset = () => {
+            for (let i = 0; i < board.length(); i++) {
+                board[i] = "";
+            }
+        }
+
+        return { getBoard, setBoard, reset };
     }
 
 )();
@@ -24,16 +39,12 @@ const displayController = (() => {
         const resetBtn = document.querySelector(".restart-btn");
 
         cells.forEach((cell) => {
-            cell.addEventListener("click", play());
+            cell.addEventListener("click", gameController.play);
         });
 
         resetBtn.addEventListener("click", reset());
 
-        const reset = () => {
-            for (let i = 0; i < cells.length(); i++) {
-                cells[i].textContent = "";
-            }
-        }
+
 
         const test = () => {
             console.log(cells);
@@ -52,12 +63,19 @@ const gameController = (() => {
         const player2 = player("O");
         const round = 1;
 
-        const play = () => {
+        const play = (e) => {
+            if (e.target.textContent !== "") return
+            e.target.textContent = `${getCurrentPlayer.getSign()}`
+            round++;
 
         }
 
+        const getCurrentPlayer = () => {
+            return round % 2 == 1 ? player1 : player2;
+        }
 
-        return {};
+
+        return { play };
     }
 
 )();
