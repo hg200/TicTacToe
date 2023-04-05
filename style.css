@@ -52,6 +52,11 @@ body {
 .cell {
     background-color: aquamarine;
     border: 1px solid grey;
+    color: black;
+    font-size: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .restart-btn {
