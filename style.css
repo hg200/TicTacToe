@@ -59,11 +59,16 @@ body {
     height: 150px;
     border: 1px solid grey;
     color: black;
-    font-size: 32px;
+    font-size: 50px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
+}
+
+.cell:hover {
+    opacity: 0.8;
 }
 
 .restart-btn {
