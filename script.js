@@ -42,7 +42,7 @@ const displayController = (() => {
 
         cells.forEach((cell) => {
             cell.addEventListener("click", (e) => {
-                if (e.target.textContent !== "") return;
+                if (e.target.textContent !== "" || gameController.gameOver()) return;
                 gameController.play(parseInt(e.target.dataset.index));
                 updateBoard();
             });
@@ -66,9 +66,7 @@ const displayController = (() => {
             }
         }
 
-        const test = () => {
-            console.log(cells);
-        };
+
 
         return { setMessage };
     }
@@ -82,6 +80,7 @@ const gameController = (() => {
         const playerX = player("X");
         const playerO = player("O");
         let round = 1;
+        let gameIsOver = false;
 
         const play = (index) => {
             gameBoard.setBoard(index, getCurrentPlayer())
@@ -90,6 +89,7 @@ const gameController = (() => {
                 displayController.setMessage(
                     `Player ${getCurrentPlayer()} is the winner!`
                 );
+                gameIsOver = true;
                 return;
             }
 
@@ -97,6 +97,7 @@ const gameController = (() => {
                 displayController.setMessage(
                     "it's a Draw!"
                 );
+                gameIsOver = true;
                 return;
             }
 
@@ -137,10 +138,16 @@ const gameController = (() => {
 
         const reset = () => {
             round = 1;
+            gameIsOver = false;
+        }
+
+        const gameOver = () => {
+
+            return gameIsOver;
         }
 
 
-        return { play, reset };
+        return { play, reset, gameOver };
     }
 
 )();
