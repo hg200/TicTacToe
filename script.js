@@ -1,3 +1,5 @@
+"use strict";
+
 const player = (sign) => {
     this.sign = sign;
 
@@ -12,17 +14,17 @@ const gameBoard = (() => {
         const board = ["", "", "", "", "", "", "", "", ""];
 
         const getBoard = (index) => {
-            if (index > board.length()) return;
+            if (index > board.length) return;
             return board[index];
         }
 
         const setBoard = (index, sign) => {
-            if (index > board.length()) return;
+            if (index > board.length) return;
             board[index] = sign;
         }
 
         const reset = () => {
-            for (let i = 0; i < board.length(); i++) {
+            for (let i = 0; i < board.length; i++) {
                 board[i] = "";
             }
         }
@@ -34,45 +36,65 @@ const gameBoard = (() => {
 
 /*****/
 const displayController = (() => {
-        const message = document.querySelector(".message");
+        const messageElement = document.querySelector(".message");
         const cells = Array.from(document.querySelectorAll(".cell"));
-        const resetBtn = document.querySelector(".restart-btn");
+        const reset = document.querySelector(".restart-btn");
 
         cells.forEach((cell) => {
-            cell.addEventListener("click", gameController.play);
+            cell.addEventListener("click", (e) => {
+                if (e.target.textContent !== "") return;
+                gameController.play(parseInt(e.target.dataset.index));
+                updateBoard();
+            });
         });
 
-        resetBtn.addEventListener("click", reset());
+        reset.addEventListener("click", (e) => {
+            console.log("works");
+            gameBoard.reset();
 
+            updateBoard();
+            setMessage("player X's turn..");
+        });
 
+        const setMessage = (message) => {
+            messageElement.textContent = message;
+        }
+
+        const updateBoard = () => {
+            for (let i = 0; i < cells.length; i++) {
+                cells[i].textContent = gameBoard.getBoard(i);
+            }
+        }
 
         const test = () => {
             console.log(cells);
         };
 
-        return { test };
+        return { setMessage };
     }
 
 )();
-displayController.test()
+
 
 
 /*****/
 const gameController = (() => {
-        const player1 = player("X");
-        const player2 = player("O");
-        const round = 1;
+        const playerX = player("X");
+        const playerO = player("O");
+        let round = 1;
 
-        const play = (e) => {
-            if (e.target.textContent !== "") return
-            e.target.textContent = `${getCurrentPlayer.getSign()}`
+        const play = (index) => {
+            gameBoard.setBoard(index, getCurrentPlayer())
+
             round++;
-
+            displayController.setMessage(
+                `player ${getCurrentPlayer}'s turn..`
+            );
         }
 
         const getCurrentPlayer = () => {
-            return round % 2 == 1 ? player1 : player2;
-        }
+            return round % 2 === 1 ? playerX.getSign() : playerO.getSign();
+        };
 
 
         return { play };
