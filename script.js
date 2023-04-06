@@ -49,9 +49,9 @@ const displayController = (() => {
         });
 
         reset.addEventListener("click", (e) => {
-            console.log("works");
-            gameBoard.reset();
 
+            gameBoard.reset();
+            gameController.reset();
             updateBoard();
             setMessage("player X's turn..");
         });
@@ -86,18 +86,61 @@ const gameController = (() => {
         const play = (index) => {
             gameBoard.setBoard(index, getCurrentPlayer())
 
+            if (checkWinner()) {
+                displayController.setMessage(
+                    `Player ${getCurrentPlayer()} is the winner!`
+                );
+                return;
+            }
+
+            if (round === 9) {
+                displayController.setMessage(
+                    "it's a Draw!"
+                );
+                return;
+            }
+
             round++;
             displayController.setMessage(
-                `player ${getCurrentPlayer}'s turn..`
+                `player ${getCurrentPlayer()}'s turn..`
             );
+        }
+
+        const checkWinner = () => {
+            let cubesArray = [];
+            for (let i = 0; i < 9; i++) {
+                cubesArray[i] = gameBoard.getBoard(i);
+            }
+            let horizontal =
+                (cubesArray[0] != "" && cubesArray[0] == cubesArray[1] && cubesArray[0] == cubesArray[2]) ||
+                (cubesArray[3] != "" && cubesArray[3] == cubesArray[4] && cubesArray[3] == cubesArray[5]) ||
+                (cubesArray[6] != "" && cubesArray[6] == cubesArray[7] && cubesArray[6] == cubesArray[8]);
+
+            let vertical =
+                (cubesArray[0] != "" && cubesArray[0] == cubesArray[3] && cubesArray[0] == cubesArray[6]) ||
+                (cubesArray[1] != "" && cubesArray[1] == cubesArray[4] && cubesArray[1] == cubesArray[7]) ||
+                (cubesArray[2] != "" && cubesArray[2] == cubesArray[5] && cubesArray[2] == cubesArray[8]);
+
+            let diagonals =
+                (cubesArray[0] != "" && cubesArray[0] == cubesArray[4] && cubesArray[0] == cubesArray[8]) ||
+                (cubesArray[2] != "" && cubesArray[2] == cubesArray[4] && cubesArray[2] == cubesArray[6]);
+
+            if (horizontal || vertical || diagonals) {
+                return true;
+            }
+            return 0;
         }
 
         const getCurrentPlayer = () => {
             return round % 2 === 1 ? playerX.getSign() : playerO.getSign();
         };
 
+        const reset = () => {
+            round = 1;
+        }
 
-        return { play };
+
+        return { play, reset };
     }
 
 )();
