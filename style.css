@@ -26,7 +26,7 @@ body {
 .container {
     max-width: 450px;
     margin-top: 50px;
-    background-color: blue;
+    background-color: transparent;
     padding: 0;
     display: flex;
     flex-direction: column;
@@ -41,6 +41,8 @@ body {
     justify-content: center;
     align-items: center;
     overflow: hidden;
+    border-top-left-radius: 1em;
+    border-top-right-radius: 1em;
 }
 
 .board {
@@ -74,4 +76,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    border-bottom-left-radius: 1em;
+    border-bottom-right-radius: 1em;
 }
